@@ -30,18 +30,21 @@
 6. **To setup Wi-Fi**, create **wpa_supplicant.conf** file in root directory and add Wi-Fi details for home Wi-Fi:
 
 ```bash
-country=US
-    ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
-    update_config=1
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+country=GB
 
 network={
     ssid="Your Network Name"
     psk="Your Network Password"
-    key_mgmt=WPA-PSK
 }
 ```
 
- 7. **On the first startup,** insert SD card and power on Raspberry Pi Zero W. On first boot, the newly-created **wpa_supplicant.conf** file and **ssh** will be moved to appropriate directories. Find the IP address of the Pi via your router. 
+ 7. **On the first startup,** insert SD card and power on Raspberry Pi Zero W. On first boot, the newly-created **wpa_supplicant.conf** file and **ssh** will be moved to appropriate directories. Find the IP address of the Pi via your router. If later you change you network you can edit the file here:
+
+```bash
+sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
+```
 
 ## Configuration and Setup
 
@@ -55,7 +58,47 @@ ssh pi@theipaddress
 sudo passwd pi
 ```
 
-3. Update and upgrade:
+3. Change the hostname. First open the hosts file:
+
+```bash 
+sudo nano /etc/hosts
+```
+
+Your hosts file will look like so:
+
+
+
+Leave all of the entries alone except for the very last entry labeled 127.0.1.1 with the hostname “raspberrypi“. This is the only line you want to edit. Replace “raspberrypi” with whatever hostname you desire. We replaced it on our device with “weatherstation“. Press CTRL+X to close the editor; agree to overwrite the existing file and save it.
+
+Back at the terminal, type the following command to open the hostname file:
+
+```bash 
+sudo nano /etc/hostname
+```
+
+This file only contains your current hostname:
+
+
+
+Replace the default “raspberrypi” with the same hostname you put in the previous step (e.g. “weatherstation“). Again, press CTRL+X to close the editor, agree to overwrite the existing file and save it.
+
+Finally, we need to commit the changes to the system and reboot the system for the changes to take effect. At the terminal, enter the following command to commit the changes:
+
+```bash 
+sudo /etc/init.d/hostname.sh
+```
+
+Follow that command with:
+
+```bash 
+sudo reboot
+```
+
+Once the system comes back online, you can check the device list in your router to see if the new hostname has properly resolved.
+
+
+
+4. Update and upgrade:
 
 ```bash
 sudo apt-get update
